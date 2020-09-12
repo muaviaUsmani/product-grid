@@ -5,7 +5,9 @@
 @import "bootstrap/scss/grid";
 @import "bootstrap/scss/utilities";
 @import "bootstrap/scss/buttons";
+@import "bootstrap/scss/button-group";
 @import "bootstrap/scss/type";
+@import "bootstrap/scss/input-group";
 
 @import "styles/fonts";
 
@@ -13,6 +15,20 @@
   font-family: 'Roboto', sans-serif;
   color: map-get($theme-colors, text);
 }
+
+body {
+  background-color: $background;
+}
+
+// font sizes set on major third
+// for more info: https://type-scale.com/
+p { font-size: 17px; }
+
+h1 { font-size: 51.88px; }
+h2 { font-size: 41.50px; }
+h3 { font-size: 33.20px; }
+h4 { font-size: 21.25px; }
+h5 { font-size: 51.88px; }
 
 .visible-xs { display: none; }
 .visible-sm { display: none; }

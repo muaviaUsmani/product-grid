@@ -1,0 +1,27 @@
+.page-products {
+  .page-header {
+    margin-top: 56px;
+
+    h1 {
+      font-weight: 300;
+    }
+  }
+
+  .input-group.sort-wrap {
+    max-width: 250px;
+  }
+
+  label.btn {
+    display: flex;
+    align-items: center;
+  }
+
+  label.btn-light {
+    background-color: #e9ecef;
+    border: none;
+
+    .active {
+      background-color: darken(#e9ecef, 7.5%);
+    }
+  }
+}

@@ -1,11 +1,12 @@
-$primary:       #304D8E;
-$secondary:     #E0F1FF;
-$tertiary:      #FFFFFF;
+$primary:       #9C83A3;
+$secondary:     #C3C7D0;
+$tertiary:      #CEAA95;
 $success:       #62C4C3;
-$info:          #2D3540;
+$info:          #595959;
 $warning:       #D36767;
 $danger:        #D94343;
 $danger-dark:   #A62E2E;
+$background:    #F2F2F2;
 
 $font-family-sans-serif:  'Open Sans';
 $font-family-serif:       'Merriweather';
@@ -20,7 +21,7 @@ $hr-border-color: $info;
 @import "bootstrap/scss/variables";
 
 $theme-colors: map-merge(
-  ("text": #2D3540),
+  ("text": #595959),
   $theme-colors
 );
 
