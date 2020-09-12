@@ -1,0 +1,30 @@
+$primary:       #304D8E;
+$secondary:     #E0F1FF;
+$tertiary:      #FFFFFF;
+$success:       #62C4C3;
+$info:          #2D3540;
+$warning:       #D36767;
+$danger:        #D94343;
+$danger-dark:   #A62E2E;
+
+$font-family-sans-serif:  'Open Sans';
+$font-family-serif:       'Merriweather';
+
+$grid-columns: 24;
+$grid-gutter-width: 2rem;
+
+$hr-border-color: $info;
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/variables";
+
+$theme-colors: map-merge(
+  ("text": #2D3540),
+  $theme-colors
+);
+
+$grays: ();
+@for $i from 1 through 50 {
+  $grays: append($grays, darken(#ffffff, $i * 1%));
+};
