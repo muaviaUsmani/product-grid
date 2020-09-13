@@ -53,3 +53,11 @@ export const loadProducts = (callback: Function) => (dispatch: Function) => {
   callback();
   dispatch(sortProducts('name:asc', storedProducts));
 }
+
+export const saveProduct = (product: Product, callback: Function) => (dispatch: Function, getState: Function) => {
+  let { products } = getState();
+  let tempProducts = [product, ...products.products];
+  storeItem('products', tempProducts);
+  dispatch({ type: actionTypes.SET_PRODUCTS, payload: tempProducts });
+  callback();
+}

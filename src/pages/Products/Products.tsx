@@ -2,13 +2,13 @@ import "./Products.scss";
 
 import { ChangeEvent, useEffect } from "react";
 import { ConnectedProps, connect } from 'react-redux';
+// import firebase from '../../shared/firebase';
+import { saveProduct, sortProducts } from "../../store/products/actions";
 
 import NewProduct from "../../components/NewProduct/NewProduct";
 import { Product } from "../../store/products/reducers";
 import ProductItem from "../../components/Product/Product";
 import React from 'react';
-// import firebase from '../../shared/firebase';
-import { sortProducts } from "../../store/products/actions";
 import { useState } from "react";
 
 // const firebaseStorage = firebase.app().storage()
@@ -22,21 +22,13 @@ const orderOptions = [
   { label: 'Quantity: Low to High', value: 'quantity:asc'},
 ];
 
-const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts}) => {
+const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, saveProduct}) => {
   const [order, setOrder] = useState(orderOptions[0].value);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     //TODO
   }, [order]);
-
-  useEffect(() => {
-    console.log(products, loading)
-  }, [products, loading]);
-
-  useEffect(() => {
-    console.log(showModal)
-  }, [showModal])
 
   const sortItems = (e: ChangeEvent<HTMLSelectElement>) => {
     e.persist();
@@ -77,7 +69,7 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts}) =
       </div>
 
       {
-        showModal ? <NewProduct toggleModal={setShowModal} /> : <></>
+        showModal ? <NewProduct toggleModal={setShowModal} store={saveProduct} /> : <></>
       }
     </div>
   );
@@ -89,7 +81,8 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = {
-  sortProducts
+  sortProducts,
+  saveProduct
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
