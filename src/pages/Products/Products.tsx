@@ -37,12 +37,14 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, sa
     sortProducts(e.target.value);
   }
 
-  const editProduct = (product: Product) => {
+  const editProduct = (event: React.MouseEvent<HTMLButtonElement>, product: Product) => {
+    event.stopPropagation();
     setShowModal(true);
     setEditableProduct(product);
   };
 
-  const showProduct = (product: Product) => {
+  const showProduct = (event: React.MouseEvent<HTMLDivElement>, product: Product) => {
+    event.preventDefault();
     setShowDetailsModal(true);
     setSelectedProduct(product);
   };
