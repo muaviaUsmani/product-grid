@@ -1,0 +1,55 @@
+@import "../../styles/variables";
+
+.component-product-item {
+  .product {
+    background-color: nth($grays, 9);
+    border-radius: 5px;
+    border: 1px solid nth($grays, 11);
+    overflow: hidden;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(224,224,224,1);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(224,224,224,1);
+    box-shadow: 2px 2px 5px 0px rgba(224,224,224,1);
+    cursor: pointer;
+  
+    &:hover img {
+      transform: scale(1.05);
+    }
+  
+    .image-wrapper {
+      height: 350px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+  
+      img {
+        width: 100%;
+        transition: all 150ms ease-out;
+      }
+    }
+  
+    .name {
+      font-size: 26.56px;
+      width: 90%;
+    }
+  
+    .price {
+      font-size: 21.25px;
+    }
+  
+    .badge {
+      font-weight: 500; 
+      color: $secondary;
+  
+      b {
+        font-size: 17px;
+        color: #ffffff;
+      }
+    }
+  
+    .description {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

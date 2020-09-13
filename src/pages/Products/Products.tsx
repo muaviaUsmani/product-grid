@@ -3,12 +3,15 @@ import "./Products.scss";
 import { ChangeEvent, useEffect } from "react";
 import { ConnectedProps, connect } from 'react-redux';
 
+import NewProduct from "../../components/NewProduct/NewProduct";
 import { Product } from "../../store/products/reducers";
+import ProductItem from "../../components/Product/Product";
 import React from 'react';
-import grid from '../../assets/icons/grid.svg';
-import rows from '../../assets/icons/rows.svg';
+// import firebase from '../../shared/firebase';
 import { sortProducts } from "../../store/products/actions";
 import { useState } from "react";
+
+// const firebaseStorage = firebase.app().storage()
 
 const orderOptions = [
   { label: 'Name: Ascending', value: 'name:asc'},
@@ -18,12 +21,10 @@ const orderOptions = [
   { label: 'Quantity: High to Low', value: 'quantity:desc'},
   { label: 'Quantity: Low to High', value: 'quantity:asc'},
 ];
-const GRID_VEIW = 'grid';
-const ROWS_VIEW = 'rows';
 
 const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts}) => {
   const [order, setOrder] = useState(orderOptions[0].value);
-  const [view, setView] = useState(GRID_VEIW);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     //TODO
@@ -31,7 +32,11 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts}) =
 
   useEffect(() => {
     console.log(products, loading)
-  }, [products, loading])
+  }, [products, loading]);
+
+  useEffect(() => {
+    console.log(showModal)
+  }, [showModal])
 
   const sortItems = (e: ChangeEvent<HTMLSelectElement>) => {
     e.persist();
@@ -46,21 +51,11 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts}) =
           <h1>Products</h1>
         </div>
         <div className="col-sm-12 col-24 d-flex justify-content-end">
-          <button type="button" className="btn btn-primary">+ New Product</button>
+          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>+ New Product</button>
         </div>
       </div>
       <div className="row options">
-        <div className="col-24 d-flex align-items-center justify-content-between">
-          <div className="btn-group btn-group-toggle" data-toggle="buttons">
-            <label className={`btn btn-light ${view === GRID_VEIW ? 'active' : ''}`}>
-              <input type="radio" name="options" checked={view === GRID_VEIW} onChange={() => setView(GRID_VEIW)} /> 
-              <img src={grid} alt="Grid" width="32" />
-            </label>
-            <label className={`btn btn-light ${view === ROWS_VIEW ? 'active' : ''}`}>
-              <input type="radio" name="options" checked={view === ROWS_VIEW} onChange={() => setView(ROWS_VIEW)} /> 
-              <img src={rows} alt="Rows" width="24" />
-            </label>
-          </div>
+        <div className="mt-4 col-24 d-flex align-items-center justify-content-end">
           <div className="input-group sort-wrap">
             <div className="input-group-prepend">
               <label className="input-group-text">Sort</label>
@@ -73,17 +68,17 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts}) =
           </div>
         </div>
       </div>
-      <div className="row product-wrapper mt-5">
+      <div className="row product-wrapper mt-3">
         {
           products.map((product: Product) => (
-            <div key={product.id} className="col-sm-12 mb-3 border">
-              <div className="image-wrapper">
-                {/* <img src={product.image} alt={product.name} /> */}
-              </div>
-            </div>
+            <ProductItem product={product} key={product.id} />
           ))
         }
       </div>
+
+      {
+        showModal ? <NewProduct toggleModal={setShowModal} /> : <></>
+      }
     </div>
   );
 }

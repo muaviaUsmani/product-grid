@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .page-products {
   .page-header {
     margin-top: 56px;
@@ -23,5 +25,9 @@
     .active {
       background-color: darken(#e9ecef, 7.5%);
     }
+  }
+
+  .product-wrapper {
+    margin-bottom: 100px;
   }
 }
