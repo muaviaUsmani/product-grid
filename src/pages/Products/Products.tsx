@@ -1,9 +1,9 @@
 import "./Products.scss";
 
-import { ChangeEvent, useEffect } from "react";
 import { ConnectedProps, connect } from 'react-redux';
 import { saveProduct, sortProducts } from "../../store/products/actions";
 
+import { ChangeEvent } from "react";
 import NewProduct from "../../components/NewProduct/NewProduct";
 import { Product } from "../../store/products/reducers";
 import ProductDetails from "../../components/ProductDetails/ProductDetails";
@@ -20,21 +20,24 @@ const orderOptions = [
   { label: 'Quantity: Low to High', value: 'quantity:asc'},
 ];
 
-const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, saveProduct}) => {
+let emptyProduct: Product = { id: -1, name: '', price: 0, quantity: 0, description: '', image: '' }
+
+const Products: React.FC<PropsFromRedux> = ({products, sortProducts, saveProduct}) => {
   const [order, setOrder] = useState(orderOptions[0].value);
   const [showModal, setShowModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [editableProduct, setEditableProduct] = useState<Product>({ id: -1, name: '', price: 0, quantity: 0, description: '', image: '' });
-  const [selectedProduct, setSelectedProduct] = useState<Product>({ id: -1, name: '', price: 0, quantity: 0, description: '', image: '' });
-
-  useEffect(() => {
-    //TODO
-  }, [order]);
+  const [editableProduct, setEditableProduct] = useState<Product>(emptyProduct);
+  const [selectedProduct, setSelectedProduct] = useState<Product>(emptyProduct);
 
   const sortItems = (e: ChangeEvent<HTMLSelectElement>) => {
     e.persist();
     setOrder(e.target.value);
     sortProducts(e.target.value);
+  }
+
+  const newProduct = () => {
+    setEditableProduct(emptyProduct);
+    setShowModal(true);
   }
 
   const editProduct = (event: React.MouseEvent<HTMLButtonElement>, product: Product) => {
@@ -56,7 +59,7 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, sa
           <h1>Products</h1>
         </div>
         <div className="col-sm-12 col-24 d-flex justify-content-end">
-          <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>+ New Product</button>
+          <button type="button" className="btn btn-primary" onClick={newProduct}>+ New Product</button>
         </div>
       </div>
       <div className="row options">
@@ -93,8 +96,7 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, sa
 }
 
 const mapStateToProps = (state: any) => ({
-  products: state.products.products,
-  loading: state.products.loading
+  products: state.products.products
 });
 
 const mapDispatchToProps = {
