@@ -2,16 +2,14 @@ import "./Products.scss";
 
 import { ChangeEvent, useEffect } from "react";
 import { ConnectedProps, connect } from 'react-redux';
-// import firebase from '../../shared/firebase';
 import { saveProduct, sortProducts } from "../../store/products/actions";
 
 import NewProduct from "../../components/NewProduct/NewProduct";
 import { Product } from "../../store/products/reducers";
+import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import ProductItem from "../../components/Product/Product";
 import React from 'react';
 import { useState } from "react";
-
-// const firebaseStorage = firebase.app().storage()
 
 const orderOptions = [
   { label: 'Name: Ascending', value: 'name:asc'},
@@ -25,6 +23,9 @@ const orderOptions = [
 const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, saveProduct}) => {
   const [order, setOrder] = useState(orderOptions[0].value);
   const [showModal, setShowModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [editableProduct, setEditableProduct] = useState<Product>({ id: -1, name: '', price: 0, quantity: 0, description: '', image: '' });
+  const [selectedProduct, setSelectedProduct] = useState<Product>({ id: -1, name: '', price: 0, quantity: 0, description: '', image: '' });
 
   useEffect(() => {
     //TODO
@@ -35,6 +36,16 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, sa
     setOrder(e.target.value);
     sortProducts(e.target.value);
   }
+
+  const editProduct = (product: Product) => {
+    setShowModal(true);
+    setEditableProduct(product);
+  };
+
+  const showProduct = (product: Product) => {
+    setShowDetailsModal(true);
+    setSelectedProduct(product);
+  };
 
   return (
     <div className="page-products container">
@@ -63,13 +74,17 @@ const Products: React.FC<PropsFromRedux> = ({products, loading, sortProducts, sa
       <div className="row product-wrapper mt-3">
         {
           products.map((product: Product) => (
-            <ProductItem product={product} key={product.id} />
+            <ProductItem product={product} key={product.id} editFunc={editProduct} selectFunc={showProduct} />
           ))
         }
       </div>
 
       {
-        showModal ? <NewProduct toggleModal={setShowModal} store={saveProduct} /> : <></>
+        showModal ? <NewProduct toggleModal={setShowModal} store={saveProduct} editableProduct={editableProduct} /> : <></>
+      }
+
+      {
+        showDetailsModal ? <ProductDetails toggleModal={setShowDetailsModal} product={selectedProduct} /> : <></>
       }
     </div>
   );

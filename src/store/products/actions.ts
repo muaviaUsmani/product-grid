@@ -56,7 +56,15 @@ export const loadProducts = (callback: Function) => (dispatch: Function) => {
 
 export const saveProduct = (product: Product, callback: Function) => (dispatch: Function, getState: Function) => {
   let { products } = getState();
-  let tempProducts = [product, ...products.products];
+  let tempProducts;
+  if (product.id === -1) {
+    product.id = products.products.length;
+    tempProducts = [product, ...products.products];
+  } else {
+    tempProducts = [...products.products];
+    let updatedIndex = tempProducts.findIndex((tp: Product) => tp.id === product.id);
+    tempProducts[updatedIndex] = product;
+  }
   storeItem('products', tempProducts);
   dispatch({ type: actionTypes.SET_PRODUCTS, payload: tempProducts });
   callback();
