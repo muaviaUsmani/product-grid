@@ -18,12 +18,14 @@ type NewProductProps = {
 
 const NewProduct: React.FC<NewProductProps> = ({editableProduct, toggleModal, store}) => {
   const [productData, setProductData] = useState<Product>({ id: -1, name: '', price: 0, quantity: 0, description: '', image: '' });
+  const [uploadedImage, setUploadedImage] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [showImageError, setShowImageError] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   useEffect(() => {
     if (editableProduct && editableProduct.id > -1) {
+      setUploadedImage(editableProduct.image);
       setProductData({...editableProduct});
     }
   }, [editableProduct]);
@@ -42,7 +44,7 @@ const NewProduct: React.FC<NewProductProps> = ({editableProduct, toggleModal, st
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!productData.image) {
+    if (!uploadedImage) {
       setShowImageError(true);
     } else {
       setShowImageError(false);
@@ -51,12 +53,12 @@ const NewProduct: React.FC<NewProductProps> = ({editableProduct, toggleModal, st
         setButtonDisabled(false);
         toggleModal(false);
       }
-      store(productData, callback);
+      store({...productData, image: uploadedImage}, callback);
     }
   }
 
   const deleteImage = () => {
-    setProductData({ ...productData, image: '' });
+    setUploadedImage('');
   }
 
   const handleFileChange = (file: IFileWithMeta, status: StatusValue) => {
@@ -67,7 +69,7 @@ const NewProduct: React.FC<NewProductProps> = ({editableProduct, toggleModal, st
       let storageRef = firebaseStorage.ref().child(fileObject.name);
       storageRef.put(file.file).then((snapshot: any) => {
         snapshot.ref.getDownloadURL().then((image: any) => {
-          setProductData({ ...productData, image });
+          setUploadedImage(image);
           setImageUploading(false);
         })
       })
@@ -86,9 +88,9 @@ const NewProduct: React.FC<NewProductProps> = ({editableProduct, toggleModal, st
           <div className="form-group row">
             <div className="col-24">
               {
-                productData.image ?
+                uploadedImage ?
                 <div className="d-flex flex-column justify-content-center align-items-center image-preview">
-                  <img src={productData.image} alt={productData.name} width="200" />
+                  <img src={uploadedImage} alt={productData.name} width="200" />
                   <button className="btn btn-danger mt-2" onClick={deleteImage}>Delete Image</button>
                 </div> :
                 <Dropzone
@@ -117,23 +119,23 @@ const NewProduct: React.FC<NewProductProps> = ({editableProduct, toggleModal, st
           <div className="form-group row">
             <div className="col-24">
               <label>Name</label>
-              <input type="text" name="name" required className="form-control" value={productData.name} disabled={imageUploading} onChange={handleInputChange} />
+              <input type="text" name="name" required className="form-control" value={productData.name} onChange={handleInputChange} />
             </div>
           </div>
           <div className="form-group row">
             <div className="col-sm-12 col-24">
               <label>Price</label>
-              <input type="number" name="price" min="0.99" required className="form-control" value={productData.price} disabled={imageUploading} onChange={handleInputChange} />
+              <input type="number" name="price" min="0.99" required className="form-control" value={productData.price} onChange={handleInputChange} />
             </div>
             <div className="col-sm-12 col-24">
               <label>Quantity</label>
-              <input type="number" name="quantity" min="1" required className="form-control" value={productData.quantity} disabled={imageUploading} onChange={handleInputChange} />
+              <input type="number" name="quantity" min="1" required className="form-control" value={productData.quantity} onChange={handleInputChange} />
             </div>
           </div>
           <div className="form-group row">
             <div className="col-24">
               <label>Description</label>
-              <textarea className="form-control" required name="description" rows={3} value={productData.description} disabled={imageUploading} onChange={handleInputChange}></textarea>
+              <textarea className="form-control" required name="description" rows={3} value={productData.description} onChange={handleInputChange}></textarea>
             </div>
           </div>
           <div className="form-group row">
